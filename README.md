@@ -29,8 +29,6 @@ npm start
 Open a web browser and navigate to http://localhost:3000 to view the application.
 That's it! You should now have the quote generator project running on your local machine. If you encounter any issues during installation, please refer to the README file in the project directory or contact the project owner for assistance.
 
-## Demo
-
 ## Contact
 
 ### Email: shabbirmuhammad2000@gmail.com
