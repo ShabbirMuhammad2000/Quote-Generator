@@ -5,7 +5,8 @@ const twitterBtn = document.getElementById('twitter')
 const newQuoteBtn = document.getElementById('new-quote')
 const loader = document.getElementById('loader')
 
-let apiQuotes = [];
+
+let apiQuotes = []
 
 function showLoadingSpinner() {
   loader.hidden = false;
@@ -20,9 +21,23 @@ function removeLoadingSpinner() {
 
 //Show New Quote
 function newQuote() {
-  showLoadingSpinner()
-  // Pick a random quote from apiQuotes array
-  const quote = apiQuotes[Math.floor(Math.random() * apiQuotes.length)]
+  showLoadingSpinner();
+
+  // Get the selected category from the select element
+  const categorySelect = document.getElementById('category-select');
+  const selectedCategory = categorySelect.value;
+
+  // Filter quotes based on the selected category
+  let filteredQuotes;
+  if (selectedCategory === 'all') {
+    filteredQuotes = apiQuotes;
+  } else {
+    filteredQuotes = apiQuotes.filter(quote => quote.category === selectedCategory);
+  }
+
+  // Pick a random quote from the filtered quotes array
+  const quote = filteredQuotes[Math.floor(Math.random() * filteredQuotes.length)];
+
   //check if author field is blank and replace it wuth unknown
   if(!quote.author) {
     authorText.textContent = 'Unknown'
@@ -43,19 +58,30 @@ function newQuote() {
 // Get Quotes From API
 // Get Quotes From API
 async function getQuotes() {
-  showLoadingSpinner(); // Show the loader
-  const apiURL = 'https://jacintodesign.github.io/quotes-api/data/quotes.json'
+  showLoadingSpinner();
+  const apiURL = 'https://jacintodesign.github.io/quotes-api/data/quotes.json';
+
   try {
     const response = await fetch(apiURL);
-    apiQuotes = await response.json();
+    let allQuotes = await response.json();
+
+    // Filter quotes based on the selected category
+    const categorySelect = document.getElementById('category-select');
+    const selectedCategory = categorySelect.value;
+
+    if (selectedCategory === 'all') {
+      apiQuotes = allQuotes;
+    } else {
+      apiQuotes = allQuotes.filter(quote => quote.category === selectedCategory);
+    }
+
     newQuote();
     removeLoadingSpinner();
   } catch (error) {
-    console.log(error)
+    console.log(error);
     // Catch Error Here
   }
 }
-
 
 // Tweet Quote
 function tweetQuote() {
