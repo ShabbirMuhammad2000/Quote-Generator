@@ -1,12 +1,12 @@
-const quoteContainer = document.getElementById('quote-container')
-const quoteText = document.getElementById('quote')
-const authorText = document.getElementById('author')
-const twitterBtn = document.getElementById('twitter')
-const newQuoteBtn = document.getElementById('new-quote')
-const loader = document.getElementById('loader')
+const quoteContainer = document.getElementById('quote-container');
+const quoteText = document.getElementById('quote');
+const authorText = document.getElementById('author');
+const twitterBtn = document.getElementById('twitter');
+const newQuoteBtn = document.getElementById('new-quote');
+const loader = document.getElementById('loader');
+const categorySelect = document.getElementById('category-select');
 
-
-let apiQuotes = []
+let apiQuotes = [];
 
 function showLoadingSpinner() {
   loader.hidden = false;
@@ -18,44 +18,52 @@ function removeLoadingSpinner() {
   quoteContainer.hidden = false;
 }
 
-
-//Show New Quote
 function newQuote() {
   showLoadingSpinner();
 
-  // Get the selected category from the select element
-  const categorySelect = document.getElementById('category-select');
   const selectedCategory = categorySelect.value;
 
-  // Filter quotes based on the selected category
   let filteredQuotes;
   if (selectedCategory === 'all') {
     filteredQuotes = apiQuotes;
   } else {
-    filteredQuotes = apiQuotes.filter(quote => quote.category === selectedCategory);
+    filteredQuotes = apiQuotes.filter(quote => quote.tag === selectedCategory);
   }
 
-  // Pick a random quote from the filtered quotes array
-  const quote = filteredQuotes[Math.floor(Math.random() * filteredQuotes.length)];
+  console.log('filteredQuotes:', filteredQuotes); // Debugging statement
 
-  //check if author field is blank and replace it wuth unknown
-  if(!quote.author) {
-    authorText.textContent = 'Unknown'
+  if (!filteredQuotes || filteredQuotes.length === 0) {
+    console.log('Error: No quotes found for the selected category'); // Debugging statement
+    quoteText.textContent = 'No quotes found';
+    authorText.textContent = '';
   } else {
-    authorText.textContent = quote.author;
+    const quote = filteredQuotes[Math.floor(Math.random() * filteredQuotes.length)];
+    console.log('quote:', quote); // Debugging statement
+
+    if (!quote || !quote.text) {
+      console.log('Error: Invalid quote object or missing text property'); // Debugging statement
+      quoteText.textContent = 'Invalid quote';
+    } else {
+      quoteText.textContent = quote.text;
+    }
+
+    if (!quote || !quote.author) {
+      console.log('Error: Invalid quote object or missing author property'); // Debugging statement
+      authorText.textContent = 'Unknown';
+    } else {
+      authorText.textContent = quote.author;
+    }
+
+    if (quote && quote.text.length > 120) {
+      quoteText.classList.add('long-quote');
+    } else {
+      quoteText.classList.remove('long-quote');
+    }
   }
-  // check Quote length to determine styling
-  if(quote.text.length > 120) {
-    quoteText.classList.add('long-quote')
-  } else {
-    quoteText.classList.remove('long-quote')
-  }
-  // Set Quote, Hide Loader
-   quoteText.textContent = quote.text
-   removeLoadingSpinner()
+
+  removeLoadingSpinner();
 }
 
-// Get Quotes From API
 // Get Quotes From API
 async function getQuotes() {
   showLoadingSpinner();
@@ -63,17 +71,9 @@ async function getQuotes() {
 
   try {
     const response = await fetch(apiURL);
-    let allQuotes = await response.json();
+    const allQuotes = await response.json();
 
-    // Filter quotes based on the selected category
-    const categorySelect = document.getElementById('category-select');
-    const selectedCategory = categorySelect.value;
-
-    if (selectedCategory === 'all') {
-      apiQuotes = allQuotes;
-    } else {
-      apiQuotes = allQuotes.filter(quote => quote.category === selectedCategory);
-    }
+    apiQuotes = allQuotes;
 
     newQuote();
     removeLoadingSpinner();
@@ -86,14 +86,12 @@ async function getQuotes() {
 // Tweet Quote
 function tweetQuote() {
   const twitterUrl = `https://twitter.com/intent/tweet?text=${quoteText.textContent} - ${authorText.textContent}`;
-  window.open(twitterUrl, '_blank')
+  window.open(twitterUrl, '_blank');
 }
 
 // Event Listeners
-newQuoteBtn.addEventListener('click', newQuote)
-twitterBtn.addEventListener('click', tweetQuote)
+newQuoteBtn.addEventListener('click', newQuote);
+twitterBtn.addEventListener('click', tweetQuote);
 
-//On Load
+// On Load
 getQuotes();
-
-
