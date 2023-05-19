@@ -22,6 +22,7 @@ function newQuote() {
   showLoadingSpinner();
 
   const selectedCategory = categorySelect.value;
+  const selectedOption = categorySelect.options[categorySelect.selectedIndex];
 
   let filteredQuotes;
   if (selectedCategory === 'all') {
@@ -59,10 +60,16 @@ function newQuote() {
     } else {
       quoteText.classList.remove('long-quote');
     }
+
+    // Set background based on category
+    const backgroundImage = selectedOption.dataset.bg;
+    document.body.style.backgroundImage = `url('${backgroundImage}')`;
   }
 
   removeLoadingSpinner();
 }
+
+
 
 // Get Quotes From API
 async function getQuotes() {
