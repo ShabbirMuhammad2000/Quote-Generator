@@ -42,6 +42,7 @@ justify-content: center;
 
 .quote-author {
   margin-top: 15px;
+  margin-bottom: 10px;
   font-size: 2rem;
   font-weight: 400;
   font-style: italic;
@@ -49,8 +50,9 @@ justify-content: center;
 
 .button-container {
   display: flex;
-  align-items: center;
+  align-items: flex-end;
   justify-content: space-between;
+
 }
 
 .quote-container {
@@ -59,7 +61,7 @@ justify-content: center;
 
 .category-select {
   position: absolute;
-  bottom: 10px;
+  bottom: 20px;
   left: 50%;
   transform: translateX(-50%);
   width: 200px;

@@ -31,25 +31,19 @@ function newQuote() {
     filteredQuotes = apiQuotes.filter(quote => quote.tag === selectedCategory);
   }
 
-  console.log('filteredQuotes:', filteredQuotes); // Debugging statement
-
   if (!filteredQuotes || filteredQuotes.length === 0) {
-    console.log('Error: No quotes found for the selected category'); // Debugging statement
     quoteText.textContent = 'No quotes found';
     authorText.textContent = '';
   } else {
     const quote = filteredQuotes[Math.floor(Math.random() * filteredQuotes.length)];
-    console.log('quote:', quote); // Debugging statement
 
     if (!quote || !quote.text) {
-      console.log('Error: Invalid quote object or missing text property'); // Debugging statement
       quoteText.textContent = 'Invalid quote';
     } else {
       quoteText.textContent = quote.text;
     }
 
     if (!quote || !quote.author) {
-      console.log('Error: Invalid quote object or missing author property'); // Debugging statement
       authorText.textContent = 'Unknown';
     } else {
       authorText.textContent = quote.author;
@@ -61,13 +55,13 @@ function newQuote() {
       quoteText.classList.remove('long-quote');
     }
 
-    // Set background based on category
     const backgroundImage = selectedOption.dataset.bg;
     document.body.style.backgroundImage = `url('${backgroundImage}')`;
   }
 
   removeLoadingSpinner();
 }
+
 
 
 
@@ -95,6 +89,7 @@ function tweetQuote() {
   const twitterUrl = `https://twitter.com/intent/tweet?text=${quoteText.textContent} - ${authorText.textContent}`;
   window.open(twitterUrl, '_blank');
 }
+
 
 // Event Listeners
 newQuoteBtn.addEventListener('click', newQuote);
