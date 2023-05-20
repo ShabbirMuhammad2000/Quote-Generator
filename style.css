@@ -37,9 +37,12 @@ justify-content: center;
 }
 
 .fa-quote-left {
-  font-size: 4rem;
+  font-size: 3rem;
 }
 
+.fa-quote-right {
+  font-size: 3rem;
+}
 .quote-author {
   margin-top: 15px;
   margin-bottom: 10px;
